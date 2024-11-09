@@ -1,0 +1,123 @@
+{
+  "Slash Command": {
+    "prefix": ["rs", "ruvia.snippet.slash"],
+    "body": [
+      "import {",
+      "  SlashCommandBuilder",
+      "} from \"discord.js\";",
+      "import type { RuviaSlashCommand } from \"../../types.d.ts\";",
+      "",
+      "const command: RuviaSlashCommand = {",
+      "  command: new SlashCommandBuilder()",
+      "    .setName(\"$TM_FILENAME_BASE\")",
+      "    .setDescription(\"$TM_FILENAME_BASE Command\"),",
+      "  execute: async (interaction, options: any) => {",
+      "",
+      "    interaction.reply(\"${3:Hello, Ruvia!}\");",
+      "  },",
+      "  cooldown: ${4:5},",
+      "};",
+      "",
+      "export default command;"
+    ],
+    "description": "Ruvia Slash Command Code Snippet"
+  },
+  "Select Menu Command": {
+    "prefix": ["rsm", "ruvia.snippet.selectmenu"],
+    "body": [
+      "import type { RuviaSelectMenuCommand } from \"../../types.d.ts\";\n",
+      "const command: RuviaSelectMenuCommand = {",
+      " customId: \"$TM_FILENAME_BASE\",",
+      " execute(interaction){",
+      "     interaction.reply(\"Hello, Ruvia!\")",
+      " }",
+      "};\n\n",
+      "export default command;"
+    ],
+    "description": "Ruvia Select Menu Command Code Snippet"
+  },
+  "Reaction Command": {
+    "prefix": ["rr", "ruvia.snippet.reaction"],
+    "body": [
+      "import type { RuviaReactionCommand } from \"../../types.d.ts\";",
+      "",
+      "const command: RuviaReactionCommand = {",
+      "  id: \"${1:❤️}\",",
+      "  executeWhenAdd(react) {",
+      "    if (react.message.channel.isSendable())",
+      "      react.message.channel.send(JSON.stringify(react));",
+      "  },",
+      "  executeWhenRemove(react) {",
+      "    if (react.message.channel.isSendable())",
+      "      react.message.channel.send(JSON.stringify(react));",
+      "  },",
+      "};",
+      "",
+      "export default command;"
+    ],
+    "description": "Ruvia Reaction Command Code Snippet"
+  },
+  "Context Command": {
+    "prefix": ["rc", "ruvia.snippet.context"],
+    "body": [
+      "import { ContextMenuCommandBuilder, ApplicationCommandType, ContextMenuCommandType } from \"discord.js\";",
+      "import type { RuviaContextCommand } from \"../../types.d.ts\";",
+      "",
+      "const command: RuviaContextCommand = {",
+      "  command: new ContextMenuCommandBuilder()",
+      "    .setContexts(${1:0})",
+      "    .setName(\"$TM_FILENAME_BASE\")",
+      "    .setType(ApplicationCommandType.User as ContextMenuCommandType),",
+      "  execute(interaction) {",
+      "    interaction.reply(\"${3:Hello, Ruvia!}\");",
+      "  }",
+      "};",
+      "",
+      "export default command;"
+    ],
+    "description": "Ruvia Context Command Code Snippet"
+  },
+  "Button Command": {
+    "prefix": ["rb", "ruvia.snippet.button"],
+    "body": [
+      "import type { RuviaButtonCommand } from \"../../types.d.ts\";",
+      "",
+      "const button: RuviaButtonCommand = {",
+      "  customId: \"$TM_FILENAME_BASE\",",
+      "  execute(interaction) {",
+      "    interaction.reply(\"${2:Hello, Ruvia!}\");",
+      "  },",
+      "};",
+      "",
+      "export default button;"
+    ],
+    "description": "Ruvia Button Command Code Snippet"
+  },
+  "Event": {
+    "prefix": ["re", "ruvia.snippet.event"],
+    "body": [
+      "import { Events } from \"discord.js\";",
+      "",
+      "const event = {",
+      "  type: Events.${1:${TM_FILENAME_BASE/(\\w)(.*)/${1:/upcase}${2}/}},",
+      "  execute: (param) => {",
+      "    console.log(param)",
+      "  }",
+      "};",
+      "",
+      "export default event;"
+    ],
+    "description": "Ruvia Event Code Snippet"
+  },
+  "Handler": {
+    "prefix": ["rh", "ruvia.snippet.handler"],
+    "body": [
+      "import { Client } from \"discord.js\";",
+      "",
+      "export default async function handle(client: Client) {",
+      "   $0",
+      "};",
+    ],
+    "description": "Ruvia Handler Code Snippet"
+  }
+}
