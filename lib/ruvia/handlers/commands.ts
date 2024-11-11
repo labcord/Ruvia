@@ -29,7 +29,7 @@ export default async function handle(client: Client) {
     );
   }
 
-  let buttonCommandsDir = path.join(import.meta.dirname as string, "@/src/commands/button");
+  let buttonCommandsDir = path.join(Deno.cwd() as string, "./src/commands/button");
 
   const buttonCommandsFiles = readdirSync(buttonCommandsDir).filter((file) =>
     file.endsWith(".ts")
@@ -50,8 +50,8 @@ export default async function handle(client: Client) {
   }
 
   let reactionCommandsDir = path.join(
-    import.meta.dirname as string,
-    "@/src/commands/reaction"
+    Deno.cwd() as string,
+    "./src/commands/reaction"
   );
 
   const reactionCommandsFiles = readdirSync(reactionCommandsDir).filter(
@@ -67,8 +67,8 @@ export default async function handle(client: Client) {
   }
 
   let contextCommandsDir = path.join(
-    import.meta.dirname as string,
-    "@/src/commands/context"
+    Deno.cwd() as string,
+    "./src/commands/context"
   );
 
   const contextCommandsFiles = readdirSync(contextCommandsDir).filter((file) =>
@@ -89,8 +89,8 @@ export default async function handle(client: Client) {
   }
 
   let selectmenuCommandsDir = path.join(
-    import.meta.dirname as string,
-    "@/src/commands/selectmenu"
+    Deno.cwd() as string,
+    "./src/commands/selectmenu"
   );
 
   const selectmenuCommandsFiles = readdirSync(selectmenuCommandsDir).filter((file) =>

@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { styles } from "style"
 
 export default async function registerCommand(client: Client) {
+
   await client.application?.commands
     .set(
       Array.from([...client.commands.slash, ...client.commands.context]).map(

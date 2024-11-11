@@ -104,9 +104,9 @@ export default async function interactionExecutor(
       throw new Error(
         `❌ | The command named ${interaction.commandName} was not found.`
       );
-    } else if (command && command.autocomplete) {
+    } else if (command && !command.autocomplete) {
       throw new Error(
-        `❌ | The command named "${interaction.commandName}" does not have a string set for autocomplete.`
+        `❌ | The command named "${interaction.commandName}" does not have a string array for autocomplete.`
       );
     }
 
