@@ -2,6 +2,11 @@ import chalk from "chalk";
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import { styles } from "./styles.ts";
 import "jsr:@std/dotenv/load";
+import RuviaConfig from "rConfig"
+
+if(RuviaConfig == null){
+  throw new Error("❌ | A null export cannot be made in ruvia.config.ts.")
+}
 
 const {
   Guilds,
@@ -45,7 +50,7 @@ client.cooldown = new Collection();
 
 try {
   readdirSync("./src/handlers").forEach(async (handler) => {
-    const handle = (await import(`./src/handlers/${handler}`)).default;
+    const handle = (await import(`@/src/handlers/${handler}`)).default;
     await handle(client).then(() => {
       console.log(
         chalk.green(
