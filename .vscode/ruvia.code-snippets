@@ -5,9 +5,9 @@
       "import {",
       "  SlashCommandBuilder",
       "} from \"discord.js\";",
-      "import type { RuviaSlashCommand } from \"../../types.d.ts\";",
+      "import type { SlashCommand } from \"rTypes\";",
       "",
-      "const command: RuviaSlashCommand = {",
+      "const command: SlashCommand = {",
       "  command: new SlashCommandBuilder()",
       "    .setName(\"$TM_FILENAME_BASE\")",
       "    .setDescription(\"$TM_FILENAME_BASE Command\"),",
@@ -20,13 +20,13 @@
       "",
       "export default command;"
     ],
-    "description": "Ruvia Slash Command Code Snippet"
+    "description": "Ruvia Slash Command Cod e Snippet"
   },
   "Select Menu Command": {
     "prefix": ["rsm", "ruvia.snippet.selectmenu"],
     "body": [
-      "import type { RuviaSelectMenuCommand } from \"../../types.d.ts\";\n",
-      "const command: RuviaSelectMenuCommand = {",
+      "import type { SelectMenuCommand } from \"rTypes\";\n",
+      "const command: SelectMenuCommand = {",
       " customId: \"$TM_FILENAME_BASE\",",
       " execute(interaction){",
       "     interaction.reply(\"Hello, Ruvia!\")",
@@ -39,9 +39,9 @@
   "Reaction Command": {
     "prefix": ["rr", "ruvia.snippet.reaction"],
     "body": [
-      "import type { RuviaReactionCommand } from \"../../types.d.ts\";",
+      "import type { ReactionCommand } from \"rTypes\";",
       "",
-      "const command: RuviaReactionCommand = {",
+      "const command: ReactionCommand = {",
       "  id: \"${1:❤️}\",",
       "  executeWhenAdd(react) {",
       "    if (react.message.channel.isSendable())",
@@ -61,9 +61,9 @@
     "prefix": ["rc", "ruvia.snippet.context"],
     "body": [
       "import { ContextMenuCommandBuilder, ApplicationCommandType, ContextMenuCommandType } from \"discord.js\";",
-      "import type { RuviaContextCommand } from \"../../types.d.ts\";",
+      "import type { ContextCommand } from \"rTypes\";",
       "",
-      "const command: RuviaContextCommand = {",
+      "const command: ContextCommand = {",
       "  command: new ContextMenuCommandBuilder()",
       "    .setContexts(${1:0})",
       "    .setName(\"$TM_FILENAME_BASE\")",
@@ -80,9 +80,9 @@
   "Button Command": {
     "prefix": ["rb", "ruvia.snippet.button"],
     "body": [
-      "import type { RuviaButtonCommand } from \"../../types.d.ts\";",
+      "import type { ButtonCommand } from \"rTypes\";",
       "",
-      "const button: RuviaButtonCommand = {",
+      "const button: ButtonCommand = {",
       "  customId: \"$TM_FILENAME_BASE\",",
       "  execute(interaction) {",
       "    interaction.reply(\"${2:Hello, Ruvia!}\");",
