@@ -7,7 +7,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
 } from "discord.js";
-import type { RuviaSlashCommand } from "../../types.d.ts";
+import type { SlashCommand } from "rTypes";
 
 const questions = [
   {
@@ -24,7 +24,7 @@ const questions = [
   },
 ];
 
-const command: RuviaSlashCommand = {
+const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName("help")
     .setDescription("Get help about Ruvia.")

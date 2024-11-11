@@ -1,19 +1,17 @@
 import { MessageReaction } from "discord.js";
 import chalk from "chalk";
-import { styles } from "../../styles.ts";
-import type { RuviaReactionCommand } from "../types.d.ts";
+import { styles } from "style";
+import type { ReactionCommand } from "rTypes";
 
-export function RuviaReactionTrigers(
+export default function reactionTrigers(
   reaction: MessageReaction,
   type: "add" | "remove",
   // deno-lint-ignore no-explicit-any
   args: Array<any>
 ) {
-  let command: RuviaReactionCommand = reaction.client.commands.reaction.get(
+  let command: ReactionCommand = reaction.client.commands.reaction.get(
     reaction.emoji.id || (reaction.emoji.name as string)
-  ) as RuviaReactionCommand;
-
-  console.log(command)
+  )!;
 
   if (!command) {
     console.log(

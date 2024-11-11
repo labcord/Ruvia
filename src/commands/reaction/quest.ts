@@ -1,6 +1,6 @@
-import type { RuviaReactionCommand } from "../../types.d.ts";
+import type { ReactionCommand } from "rTypes";
 
-const command: RuviaReactionCommand = {
+const command: ReactionCommand = {
   id: "❓",
   executeWhenAdd(react) {
     console.log(react)

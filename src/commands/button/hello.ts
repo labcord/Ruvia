@@ -1,6 +1,6 @@
-import type { RuviaButtonCommand } from "../../types.d.ts";
+import type { ButtonCommand } from "rTypes";
 
-const button: RuviaButtonCommand = {
+const button: ButtonCommand = {
   customId: "hello",
   execute(interaction) {
     interaction.reply("Hello, Ruvia!");

@@ -124,7 +124,7 @@ export function sendTimedMessage(
     );
 }
 
-export const RuviaUtils = {
+export const utils = {
   findRole,
   mentionUser,
   mentionChannel,

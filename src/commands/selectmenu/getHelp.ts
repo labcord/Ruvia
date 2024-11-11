@@ -1,4 +1,4 @@
-import type { RuviaSelectMenuCommand } from "../../types.d.ts";
+import type { SelectMenuCommand } from "rTypes";
 
 const questions = [
     {
@@ -15,7 +15,7 @@ const questions = [
     },
   ];
 
-const command: RuviaSelectMenuCommand = {
+const command: SelectMenuCommand = {
  customId: "getHelp",
  execute(interaction){
     interaction.reply(questions[Number(interaction.values[0].slice(1))].a)

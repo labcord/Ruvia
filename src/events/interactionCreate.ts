@@ -2,12 +2,12 @@ import {
   Interaction,
   Events
 } from "discord.js";
-import { RuviaInteractionExecutor } from "../lib/RuviaInteractionExecutor.ts";
+import interactionExecutor from "@/ruvia/interactionExecutor.ts";
 
 const event = {
   type: Events.InteractionCreate,
   execute: async (interaction: Interaction) => {
-   await RuviaInteractionExecutor(interaction)
+   await interactionExecutor(interaction)
   }
 };
 

@@ -3,10 +3,10 @@ import {
   ApplicationCommandType,
   ContextMenuCommandType,
 } from "discord.js";
-import type { RuviaContextCommand } from "../../types.d.ts";
-import { mentionUser } from "../../lib/ruviaUtils.ts";
+import type { ContextCommand } from "rTypes";
+import { mentionUser } from "@/ruvia/utils.ts";
 
-const command: RuviaContextCommand = {
+const command: ContextCommand = {
   command: new ContextMenuCommandBuilder()
     .setContexts(0)
     .setName("ask")
@@ -14,7 +14,7 @@ const command: RuviaContextCommand = {
   execute(interaction) {
     interaction.reply(
       `Hey ${mentionUser(
-        interaction.targetUser.id
+        interaction.targetId
       )}, are you love Ruvia? \n Don't know what it is? Check it out now! \n https://github.com/labcord/ruvia`
     );
   },

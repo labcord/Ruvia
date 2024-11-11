@@ -4,12 +4,20 @@
   "main": "index.ts",
   "dependencies": {
     "chalk": "^5.3.0",
+    "discord.js": "^14.16.3",
     "fuse.js": "^7.0.0",
+    "module-alias": "^2.2.3",
     "node-cache": "^5.1.2",
     "path": "^0.12.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "_moduleAliases": {
+    "@": ".",
+    "@ruvia": "lib/ruvia",
+    "@lib": "lib",
+    "@src": "src"
   },
   "keywords": [],
   "author": "",

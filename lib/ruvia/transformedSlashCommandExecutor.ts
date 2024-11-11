@@ -4,31 +4,31 @@ import {
   MessageReplyOptions,
   ModalBuilder,
 } from "discord.js";
-import { deferReply } from "./ChatInputCommandInteractionMethods/deferReply.ts";
-import { ruviaCacheMessages } from "../cache/cache.ts";
-import { followUp } from "./ChatInputCommandInteractionMethods/followUp.ts";
-import { editReply } from "./ChatInputCommandInteractionMethods/editReply.ts";
+import { deferReply } from "@/ruvia/ChatInputCommandInteractionMethods/deferReply.ts";
+import { cacheMessages } from "@/ruvia/cache/cache.ts";
+import { followUp } from "@/ruvia/ChatInputCommandInteractionMethods/followUp.ts";
+import { editReply } from "@/ruvia/ChatInputCommandInteractionMethods/editReply.ts";
 import {
   ToAPIApplicationCommandOptions,
   PermissionResolvable,
 } from "discord.js";
-import { RuviaConfig } from "../ruvia.config.ts";
-import { showModal } from "./ChatInputCommandInteractionMethods/showModal.ts";
-import { RuviaSlashCommand } from "../types.d.ts";
-import { mentionTimestamp } from "./ruviaUtils.ts";
+import RuviaConfig from "rConfig";
+import { showModal } from "@/ruvia/ChatInputCommandInteractionMethods/showModal.ts";
+import { SlashCommand } from "rTypes";
+import { mentionTimestamp } from "@/ruvia/utils.ts";
 
 const prefix = Deno.env.get("PREFIX");
 
-export async function RuviaTransformedSlashCommandExecutor(msg: Message) {
+export default async function transformedSlashCommandExecutor(msg: Message) {
   if (msg.author.bot && msg.author.id == msg.client.user.id) {
     if (msg.reference?.messageId) {
       let reference_msg: Message = msg.channel.messages.cache.get(
         msg.reference.messageId
-      );
+      )!
       if (
         msg.client.commands.message.has(reference_msg.content.split(" ")[0])
       ) {
-        ruviaCacheMessages.set(`${reference_msg.id}.botReply`, msg);
+        cacheMessages.set(`${reference_msg.id}.botReply`, msg);
       }
     }
 
@@ -41,9 +41,9 @@ export async function RuviaTransformedSlashCommandExecutor(msg: Message) {
 
   const ruvia_message = new Map();
 
-  const msg_command: RuviaSlashCommand = msg.client.commands.message.get(
+  const msg_command: SlashCommand = msg.client.commands.message.get(
     splitted_msg[0]
-  );
+  )!;
 
   if (
     (msg_command.blackList?.includes(msg.author.id) && msg_command.blackList) ||
@@ -60,11 +60,10 @@ export async function RuviaTransformedSlashCommandExecutor(msg: Message) {
     `message.${msg_command.command.name}-${msg.author.username}`
   );
 
-  console.log(msg.client.cooldown);
   if (msg_command.cooldown && cooldown) {
     if (Date.now() < cooldown) {
       const cooldownMessage = await msg.reply(
-        RuviaConfig.cooldown?.errorMessage(msg_command.cooldown) ||
+        RuviaConfig?.cooldown?.warningMessage(msg_command.cooldown) ||
           `⏳ **| ${mentionTimestamp(
             new Date(cooldown),
             "R"
@@ -72,7 +71,7 @@ export async function RuviaTransformedSlashCommandExecutor(msg: Message) {
       );
       setTimeout(
         () => cooldownMessage.delete(),
-        (RuviaConfig.cooldown?.errorMessageDeletionTime as number) * 1000 ||
+        (RuviaConfig.cooldown?.warningMessageDeletionTime as number) * 1000 ||
           msg_command.cooldown * 1000
       );
       return;
@@ -91,7 +90,6 @@ export async function RuviaTransformedSlashCommandExecutor(msg: Message) {
       `message.${msg_command.command.name}-${msg.author.username}`,
       Date.now() + msg_command.cooldown * 1000
     );
-    console.log(`message.${msg_command.command.name}-${msg.author.username}`);
   }
 
   if (

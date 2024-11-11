@@ -1,24 +1,26 @@
 import {
-    Interaction,
-    MessageContextMenuCommandInteraction,
-    ApplicationCommandType,
-    UserContextMenuCommandInteraction
-  } from "discord.js";
-  import { RuviaConfig } from "../ruvia.config.ts";
-  import { mentionTimestamp } from "../lib/ruviaUtils.ts";
-  import {
-    RuviaSlashCommand,
-    RuviaButtonCommand,
-    RuviaSelectMenuCommand,
-    RuviaContextCommand,
-  } from "../types.d.ts";
-  import Fuse from "fuse.js";
+  Interaction,
+  MessageContextMenuCommandInteraction,
+  ApplicationCommandType,
+  UserContextMenuCommandInteraction,
+} from "discord.js";
+import RuviaConfig from "rConfig";
+import { mentionTimestamp } from "@/ruvia/utils.ts";
+import {
+  SlashCommand,
+  ButtonCommand,
+  SelectMenuCommand,
+  ContextCommand,
+} from "rTypes";
+import Fuse from "fuse.js";
 
-export async function RuviaInteractionExecutor(interaction: Interaction): Promise<void>  {
+export default async function interactionExecutor(
+  interaction: Interaction
+): Promise<void> {
   if (interaction.isChatInputCommand()) {
-    let command: RuviaSlashCommand = interaction.client.commands.slash.get(
+    let command: SlashCommand = interaction.client.commands.slash.get(
       interaction.commandName
-    ) as RuviaSlashCommand;
+    ) as SlashCommand;
 
     if (!command) {
       throw new Error(
@@ -33,7 +35,8 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
     if (command.cooldown && cooldown) {
       if (Date.now() < cooldown) {
         interaction.reply(
-          RuviaConfig.cooldown?.warningMessage(cooldown) ||
+          (RuviaConfig?.cooldown?.warningMessage &&
+            RuviaConfig?.cooldown?.warningMessage(cooldown)) ||
             `⏳ **| ${mentionTimestamp(
               new Date(cooldown),
               "R"
@@ -41,7 +44,8 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
         );
         setTimeout(
           () => interaction.deleteReply(),
-          RuviaConfig.cooldown?.warningMessageDeletionTime || Date.now() + command.cooldown * 1000 - Date.now()
+          RuviaConfig.cooldown?.warningMessageDeletionTime ||
+            Date.now() + command.cooldown * 1000 - Date.now()
         );
         return;
       }
@@ -67,7 +71,7 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
         interaction.options as unknown as {
           _group: string | null;
           _subcommand: string | null;
-          _hoistedOption: Array<{
+          _hoistedOptions: Array<{
             name: string;
             type: number;
             value: string;
@@ -92,9 +96,9 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
   }
 
   if (interaction.isAutocomplete()) {
-    let command: RuviaSlashCommand = interaction.client.commands.slash.get(
+    let command: SlashCommand = interaction.client.commands.slash.get(
       interaction.commandName
-    ) as RuviaSlashCommand;
+    ) as SlashCommand;
 
     if (!command) {
       throw new Error(
@@ -130,9 +134,9 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
   }
 
   if (interaction.isButton()) {
-    let command: RuviaButtonCommand = interaction.client.commands.button.get(
+    let command: ButtonCommand = interaction.client.commands.button.get(
       interaction.customId
-    ) as RuviaButtonCommand;
+    ) as ButtonCommand;
 
     if (!command) {
       throw new Error(
@@ -144,10 +148,9 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
   }
 
   if (interaction.isAnySelectMenu()) {
-    let command: RuviaSelectMenuCommand =
-      interaction.client.commands.selectmenu.get(
-        interaction.customId
-      ) as RuviaSelectMenuCommand;
+    let command: SelectMenuCommand = interaction.client.commands.selectmenu.get(
+      interaction.customId
+    ) as SelectMenuCommand;
 
     if (!command) {
       throw new Error(
@@ -159,9 +162,9 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
   }
 
   if (interaction.isContextMenuCommand()) {
-    let command: RuviaContextCommand = interaction.client.commands.context.get(
+    let command: ContextCommand = interaction.client.commands.context.get(
       interaction.commandName
-    ) as RuviaContextCommand;
+    ) as ContextCommand;
 
     if (!command) {
       throw new Error(
@@ -170,16 +173,16 @@ export async function RuviaInteractionExecutor(interaction: Interaction): Promis
     }
 
     command.execute(
-      interaction as unknown as RuviaContextCommand["command"]["type"] extends ApplicationCommandType.Message
+      interaction as unknown as ContextCommand["command"]["type"] extends ApplicationCommandType.Message
         ? MessageContextMenuCommandInteraction
         : UserContextMenuCommandInteraction
     );
   }
 
   if (interaction.isModalSubmit()) {
-    let command: RuviaSlashCommand = interaction.client.commands.slash.get(
+    let command: SlashCommand = interaction.client.commands.slash.get(
       interaction.customId
-    ) as RuviaSlashCommand;
+    ) as SlashCommand;
 
     if (!command) {
       throw new Error(

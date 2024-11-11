@@ -1,8 +1,8 @@
 import { Client } from "discord.js";
 import chalk from "chalk";
-import { styles } from "../../styles.ts";
+import { styles } from "style"
 
-export async function RuviaRegistersCommands(client: Client) {
+export default async function registerCommand(client: Client) {
   await client.application?.commands
     .set(
       Array.from([...client.commands.slash, ...client.commands.context]).map(

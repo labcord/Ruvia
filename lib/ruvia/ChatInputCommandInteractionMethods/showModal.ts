@@ -1,12 +1,10 @@
 import {
   Message,
   ActionRowBuilder,
-  TextChannel,
   ButtonBuilder,
   ButtonStyle, ModalBuilder
 } from "discord.js";
-import { ruviaCacheMessages } from "../../cache/cache.ts";
-import { RuviaConfig } from "../../ruvia.config.ts";
+import RuviaConfig from "rConfig";
 
 export async function showModal(msg: Message, command: string, modal: ModalBuilder) {
   msg.client.modals.set(command, modal)
