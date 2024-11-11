@@ -3,8 +3,5 @@
     "tasks": {
         "dev": "deno -A --unstable-sloppy-imports --watch index.ts"
     },
-    "imports": {
-        "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
-        "discord.js": "npm:discord.js@^14.16.3"
-    }
+    "importMap": "./import_maps.json"
 }
