@@ -53,7 +53,7 @@ export type ButtonCommand = {
 
 export type ContextCommand = {
   command: ContextMenuCommandBuilder
-  execute: (interaction: RuviaContextCommand["command"]["type"] extends ApplicationCommandType.Message
+  execute: (interaction: ContextCommand["command"]["type"] extends ApplicationCommandType.Message
     ? MessageContextMenuCommandInteraction : UserContextMenuCommandInteraction) => void
 }
 
@@ -67,12 +67,6 @@ export type SelectMenuCommand = {
   customId: string
   execute: (interaction: AnySelectMenuInteraction) => void
 }
-
-export type RuviaEvent = {
-  once?: boolean
-  type: Events
-  execute: (...params: any) => void
-};
 
 declare module "discord.js" {
     export interface Client {
