@@ -100,9 +100,9 @@ export function isAsyncFunction(func: Function): boolean {
 }
 
 /**
- * 
+ *
  * This function code is taken from the “https://github.com/MericcaN41/discordjs-v14-template-ts” repository.
- * 
+ *
  */
 export function sendTimedMessage(
   message: string,
@@ -115,13 +115,31 @@ export function sendTimedMessage(
       .then((m) =>
         setTimeout(
           async () => (await channel.messages.fetch(m)).delete(),
-          duration  * 1000
+          duration * 1000
         )
       );
   } else
     throw new Error(
       `❌ | Can not send messages to the channel named "${channel.name}".`
     );
+}
+
+export function getAllCommands(
+  client: Client,
+  options?: {
+    only?: Array<
+      "button" | "context" | "message" | "reaction" | "selectmenu" | "slash"
+    >;
+  }
+) {
+  return [
+    "button",
+    "context",
+    "message",
+    "reaction",
+    "selectmenu",
+    "slash"
+  ].filter(type => options?.only ? options?.only?.includes(type as any) : true).map((type) => client.commands[`${type}`])
 }
 
 export const utils = {
@@ -132,4 +150,5 @@ export const utils = {
   mentionRole,
   mentionTimestamp,
   hasPermission,
+  getAllCommands,
 };
