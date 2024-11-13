@@ -163,6 +163,11 @@ export default async function transformedSlashCommandExecutor(msg: Message) {
   );
 
   ruvia_message.set(
+    "user",
+    msg.author
+  )
+
+  ruvia_message.set(
     "appPermissions",
     msg.guild?.members.cache.get(msg.client.user.id)
   );
