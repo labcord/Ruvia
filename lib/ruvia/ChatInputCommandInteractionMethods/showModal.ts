@@ -4,7 +4,7 @@ import {
   ButtonBuilder,
   ButtonStyle, ModalBuilder
 } from "discord.js";
-import RuviaConfig from "rConfig";
+import RuviaConfig from "ruvia/config";
 
 export async function showModal(msg: Message, command: string, modal: ModalBuilder) {
   msg.client.modals.set(command, modal)
