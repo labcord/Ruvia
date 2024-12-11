@@ -7,29 +7,55 @@ import type {
   ButtonCommand,
   ContextCommand,
   SelectMenuCommand,
-} from "rTypes";
+} from "ruvia/types";
+import { getAllFiles } from "ruvia";
 
 export default async function handle(client: Client) {
-
-  let slashCommandsDir = path.join(Deno.cwd() as string, "./src/commands/slash");
-
-  const slashCommandsFiles = readdirSync(slashCommandsDir).filter((file) =>
-    file.endsWith(".ts")
+  let slashCommandsDir = path.join(
+    Deno.cwd() as string,
+    "./src/commands/slash"
   );
 
-  for (const file of slashCommandsFiles) {
-    const importedCommand: SlashCommand = (
-      await import(`@/src/commands/slash/${file}`)
-    ).default;
-    client.commands.slash.set(importedCommand.command.name, importedCommand);
-
-    client.commands.message.set(
-      Deno.env.get("PREFIX") + importedCommand.command.toJSON().name,
-      importedCommand
+  const slashCommandsFiles: Array<{ name: string; parent: string }> =
+    getAllFiles(slashCommandsDir, "slash").filter(
+      (file: { name: string; parent: string }) => file.name.endsWith(".ts")
     );
+
+  for (const file of slashCommandsFiles) {
+    const importedCommand: SlashCommand | Function = (
+      await import(
+        `@/src/commands/slash${`${file.parent.replace("\\", "/")}/${file.name}`}`
+      )
+    ).default;
+
+    if(file.parent.length > 0 && typeof importedCommand == "object") importedCommand.category = file.parent.replace("\\", "")
+
+    if (file.name.startsWith("@")) {
+      const fileName = file.name.slice(1, file.name.length - 3);
+      switch (fileName) {
+        case "layout": {
+          client.commands.slash.set(
+            `@layout${
+             file.parent.slice(1)
+            }`,
+            importedCommand
+          );
+        }
+      }
+    } else {
+      client.commands.slash.set(importedCommand.command.name, importedCommand);
+
+      client.commands.message.set(
+        Deno.env.get("PREFIX") + importedCommand.command.toJSON().name,
+        importedCommand
+      );
+    }
   }
 
-  let buttonCommandsDir = path.join(Deno.cwd() as string, "./src/commands/button");
+  let buttonCommandsDir = path.join(
+    Deno.cwd() as string,
+    "./src/commands/button"
+  );
 
   const buttonCommandsFiles = readdirSync(buttonCommandsDir).filter((file) =>
     file.endsWith(".ts")
@@ -93,8 +119,8 @@ export default async function handle(client: Client) {
     "./src/commands/selectmenu"
   );
 
-  const selectmenuCommandsFiles = readdirSync(selectmenuCommandsDir).filter((file) =>
-    file.endsWith(".ts")
+  const selectmenuCommandsFiles = readdirSync(selectmenuCommandsDir).filter(
+    (file) => file.endsWith(".ts")
   );
 
   for (const file of selectmenuCommandsFiles) {
@@ -102,9 +128,6 @@ export default async function handle(client: Client) {
       await import(`@/src/commands/selectmenu/${file}`)
     ).default;
 
-    client.commands.selectmenu.set(
-      importedCommand.customId,
-      importedCommand
-    );
+    client.commands.selectmenu.set(importedCommand.customId, importedCommand);
   }
 }

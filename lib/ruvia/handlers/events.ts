@@ -1,8 +1,8 @@
 import { Client } from "discord.js";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
-import { isAsyncFunction } from "@/ruvia/utils.ts";
-import { styles } from "style";
+import { isAsyncFunction } from "ruvia";
+import { styles } from "ruvia/style";
 import chalk from "chalk";
 
 export default async function handle(client: Client) {
