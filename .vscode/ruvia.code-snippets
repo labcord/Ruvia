@@ -5,7 +5,7 @@
       "import {",
       "  SlashCommandBuilder",
       "} from \"discord.js\";",
-      "import type { SlashCommand } from \"rTypes\";",
+      "import type { SlashCommand } from \"ruvia/types\";",
       "",
       "const command: SlashCommand = {",
       "  command: new SlashCommandBuilder()",
@@ -25,7 +25,7 @@
   "Select Menu Command": {
     "prefix": ["rsm", "ruvia.snippet.selectmenu"],
     "body": [
-      "import type { SelectMenuCommand } from \"rTypes\";\n",
+      "import type { SelectMenuCommand } from \"ruvia/types\";\n",
       "const command: SelectMenuCommand = {",
       " customId: \"$TM_FILENAME_BASE\",",
       " execute(interaction){",
@@ -39,7 +39,7 @@
   "Reaction Command": {
     "prefix": ["rr", "ruvia.snippet.reaction"],
     "body": [
-      "import type { ReactionCommand } from \"rTypes\";",
+      "import type { ReactionCommand } from \"ruvia/types\";",
       "",
       "const command: ReactionCommand = {",
       "  id: \"${1:❤️}\",",
@@ -61,7 +61,7 @@
     "prefix": ["rc", "ruvia.snippet.context"],
     "body": [
       "import { ContextMenuCommandBuilder, ApplicationCommandType, ContextMenuCommandType } from \"discord.js\";",
-      "import type { ContextCommand } from \"rTypes\";",
+      "import type { ContextCommand } from \"ruvia/types\";",
       "",
       "const command: ContextCommand = {",
       "  command: new ContextMenuCommandBuilder()",
@@ -80,7 +80,7 @@
   "Button Command": {
     "prefix": ["rb", "ruvia.snippet.button"],
     "body": [
-      "import type { ButtonCommand } from \"rTypes\";",
+      "import type { ButtonCommand } from \"ruvia/types\";",
       "",
       "const button: ButtonCommand = {",
       "  customId: \"$TM_FILENAME_BASE\",",
