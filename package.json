@@ -13,12 +13,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "_moduleAliases": {
-    "@": ".",
-    "@ruvia": "lib/ruvia",
-    "@lib": "lib",
-    "@src": "src"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
