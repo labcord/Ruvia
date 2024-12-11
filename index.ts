@@ -2,10 +2,10 @@ import chalk from "chalk";
 import { Client, GatewayIntentBits, Collection } from "discord.js";
 import { styles } from "./styles.ts";
 import "jsr:@std/dotenv/load";
-import RuviaConfig from "rConfig"
+import RuviaConfig from "ruvia/config";
 
-if(RuviaConfig == null){
-  throw new Error("❌ | A null export cannot be made in ruvia.config.ts.")
+if (RuviaConfig == null) {
+  throw new Error("❌ | A null export cannot be made in ruvia.config.ts.");
 }
 
 const {
@@ -35,6 +35,7 @@ console.log(
 );
 
 import { readdirSync } from "node:fs";
+import Config from "ruvia/config";
 
 client.commands = {
   slash: new Collection(),
@@ -68,12 +69,12 @@ try {
   );
 }
 
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error);
+client.on("error", (error) => {
+  chalk.red(`❗ ${error}`);
 });
 
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+client.on("unhandledRejection", (reason, promise) => {
+  chalk.red(`❗ ${reason} \n ${promise}`);
 });
 
 client
@@ -85,4 +86,4 @@ client
     console.log(
       chalk.green(styles.spaces() + `✔️  | Bot started successfully.`)
     );
-  });
+});
