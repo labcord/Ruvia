@@ -2,11 +2,13 @@
     "imports": {
       "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
       "discord.js": "npm:discord.js@^14.16.3",
-      "rConfig": "./ruvia.config.ts",
-      "rTypes": "./types.d.ts",
-      "@/ruvia/": "./lib/ruvia/",
+      "ruvia/config": "./ruvia.config.ts",
+      "ruvia/types": "./types.d.ts",
+      "ruvia": "./lib/ruvia/ruvia.ts",
+      "ruvia/handlers": "./lib/ruvia/handlers.ts",
+      "ruvia/classes": "./lib/ruvia/classes.ts",
       "@/src/": "./src/",
-      "style": "./styles.ts"
+      "ruvia/style": "./styles.ts"
     }
   }
   
