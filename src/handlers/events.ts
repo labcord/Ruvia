@@ -1,3 +1,3 @@
-import eventHandler from "@/ruvia/handlers/events.ts"
+import {eventsHandler} from "ruvia/handlers"
 
-export default eventHandler
+export default eventsHandler

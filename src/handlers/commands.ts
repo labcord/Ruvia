@@ -1,3 +1,3 @@
-import commandsHandler from "@/ruvia/handlers/commands.ts"
+import {commandsHandler} from "ruvia/handlers"
 
 export default commandsHandler

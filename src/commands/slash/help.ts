@@ -7,7 +7,7 @@ import {
   ButtonBuilder,
   ButtonStyle,
 } from "discord.js";
-import type { SlashCommand } from "rTypes";
+import type { SlashCommand } from "ruvia/types";
 
 const questions = [
   {
@@ -35,6 +35,7 @@ const command: SlashCommand = {
         .setAutocomplete(true)
     ),
   execute: async (interaction, options: any) => {
+
     const embed = new EmbedBuilder()
       .setTitle("Get help for Ruvia")
       .setColor("Blurple");
@@ -70,7 +71,7 @@ const command: SlashCommand = {
     const otherActions = new ActionRowBuilder<ButtonBuilder>()
     otherActions.addComponents(visitWebsite)
 
-    interaction.reply({
+    await interaction.reply({
       embeds: [embed],
       components: [actions, otherActions],
     });

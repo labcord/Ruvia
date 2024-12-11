@@ -1,14 +1,11 @@
-import {
-  Interaction,
-  Events
-} from "discord.js";
-import interactionExecutor from "@/ruvia/interactionExecutor.ts";
+import { Interaction, Events } from "discord.js";
+import { interactionExecutor } from "ruvia";
 
 const event = {
   type: Events.InteractionCreate,
   execute: async (interaction: Interaction) => {
-   await interactionExecutor(interaction)
-  }
+    await interactionExecutor(interaction);
+  },
 };
 
 export default event;

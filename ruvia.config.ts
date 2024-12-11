@@ -1,4 +1,4 @@
-import type { RuviaConfig } from "rTypes";
+import type { RuviaConfig } from "ruvia/types";
 
 const Config: RuviaConfig = {}
 

@@ -1,4 +1,4 @@
-import type { ReactionCommand } from "rTypes";
+import type { ReactionCommand } from "ruvia/types";
 
 const command: ReactionCommand = {
   id: "❓",

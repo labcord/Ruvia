@@ -3,8 +3,8 @@ import {
   ApplicationCommandType,
   ContextMenuCommandType,
 } from "discord.js";
-import type { ContextCommand } from "rTypes";
-import { mentionUser } from "@/ruvia/utils.ts";
+import type { ContextCommand } from "ruvia/types";
+import { mentionUser } from "ruvia";
 
 const command: ContextCommand = {
   command: new ContextMenuCommandBuilder()

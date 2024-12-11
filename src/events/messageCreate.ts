@@ -1,11 +1,11 @@
 import { Events, Message } from "discord.js";
-import transformedSlashCommandExecutor from "@/ruvia/transformedSlashCommandExecutor.ts";
+import { transformedSlashCommandExecutor } from "ruvia";
 
 const event = {
   type: Events.MessageCreate,
   execute: (msg: Message) => {
-    transformedSlashCommandExecutor(msg)
-  }
+    transformedSlashCommandExecutor(msg);
+  },
 };
 
 export default event;

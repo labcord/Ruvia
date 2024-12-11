@@ -1,4 +1,4 @@
-import type { ButtonCommand } from "rTypes";
+import type { ButtonCommand } from "ruvia/types";
 
 const button: ButtonCommand = {
   customId: "hello",

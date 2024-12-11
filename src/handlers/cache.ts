@@ -1,3 +1,3 @@
-import cacheHandler from "@/ruvia/handlers/cache.ts"
+import { cacheHandler } from "ruvia/handlers";
 
-export default cacheHandler
+export default cacheHandler;

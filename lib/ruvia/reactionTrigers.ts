@@ -1,7 +1,7 @@
 import { MessageReaction } from "discord.js";
 import chalk from "chalk";
-import { styles } from "style";
-import type { ReactionCommand } from "rTypes";
+import { styles } from "ruvia/style";
+import type { ReactionCommand } from "ruvia/types";
 
 export default function reactionTrigers(
   reaction: MessageReaction,

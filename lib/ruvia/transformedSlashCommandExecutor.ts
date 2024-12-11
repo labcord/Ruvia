@@ -4,18 +4,18 @@ import {
   MessageReplyOptions,
   ModalBuilder,
 } from "discord.js";
-import { deferReply } from "@/ruvia/ChatInputCommandInteractionMethods/deferReply.ts";
-import { cacheMessages } from "@/ruvia/cache/cache.ts";
-import { followUp } from "@/ruvia/ChatInputCommandInteractionMethods/followUp.ts";
-import { editReply } from "@/ruvia/ChatInputCommandInteractionMethods/editReply.ts";
+import { deferReply } from "./ChatInputCommandInteractionMethods/deferReply.ts";
+import { messageCache } from "./cache/cache.ts";
+import { followUp } from "./ChatInputCommandInteractionMethods/followUp.ts";
+import { editReply } from "./ChatInputCommandInteractionMethods/editReply.ts";
 import {
   ToAPIApplicationCommandOptions,
   PermissionResolvable,
 } from "discord.js";
-import RuviaConfig from "rConfig";
-import { showModal } from "@/ruvia/ChatInputCommandInteractionMethods/showModal.ts";
-import { SlashCommand } from "rTypes";
-import { mentionTimestamp } from "@/ruvia/utils.ts";
+import RuviaConfig from "ruvia/config";
+import { showModal } from "./ChatInputCommandInteractionMethods/showModal.ts";
+import { SlashCommand } from "ruvia/types";
+import { mentionTimestamp } from "./ruvia.ts";
 
 const prefix = Deno.env.get("PREFIX");
 
@@ -28,7 +28,7 @@ export default async function transformedSlashCommandExecutor(msg: Message) {
       if (
         msg.client.commands.message.has(reference_msg.content.split(" ")[0])
       ) {
-        cacheMessages.set(`${reference_msg.id}.botReply`, msg);
+        messageCache.set(`${reference_msg.id}.botReply`, msg);
       }
     }
 

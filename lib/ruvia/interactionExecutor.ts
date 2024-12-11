@@ -4,32 +4,40 @@ import {
   ApplicationCommandType,
   UserContextMenuCommandInteraction,
 } from "discord.js";
-import RuviaConfig from "rConfig";
-import { mentionTimestamp } from "@/ruvia/utils.ts";
+import RuviaConfig from "ruvia/config";
+import { isAsyncFunction, mentionTimestamp } from "ruvia";
 import {
   SlashCommand,
   ButtonCommand,
   SelectMenuCommand,
   ContextCommand,
-} from "rTypes";
+} from "ruvia/types";
 import Fuse from "fuse.js";
+import convertSlashInteraction from "./converter/slashInteraction.ts";
 
 export default async function interactionExecutor(
-  interaction: Interaction
+  discordInteraction: Interaction
 ): Promise<void> {
-  if (interaction.isChatInputCommand()) {
+  if (discordInteraction.isChatInputCommand()) {
+    const interaction = convertSlashInteraction(
+      discordInteraction
+    );
     let command: SlashCommand = interaction.client.commands.slash.get(
-      interaction.commandName
+      discordInteraction.commandName
     ) as SlashCommand;
+
+    const layout: Function | undefined = interaction.client.commands.slash.get(
+      `@layout${command.category || ""}`
+    ) as Function | undefined;
 
     if (!command) {
       throw new Error(
-        `❌ | The command named ${interaction.commandName} was not found.`
+        `❌ | The command named ${discordInteraction.commandName} was not found.`
       );
     }
 
     let cooldown = interaction.client.cooldown.get(
-      `${interaction.commandName}-${interaction.user.username}`
+      `${discordInteraction.commandName}-${discordInteraction.user.username}`
     ) as number;
 
     if (command.cooldown && cooldown) {
@@ -49,13 +57,13 @@ export default async function interactionExecutor(
         );
         return;
       }
-      interaction.client.cooldown.set(
-        `${interaction.commandName}-${interaction.user.username}`,
+      discordInteraction.client.cooldown.set(
+        `${discordInteraction.commandName}-${discordInteraction.user.username}`,
         Date.now() + command.cooldown * 1000
       );
       setTimeout(() => {
-        interaction.client.cooldown.delete(
-          `${interaction.commandName}-${interaction.user.username}`
+        discordInteraction.client.cooldown.delete(
+          `${discordInteraction.commandName}-${discordInteraction.user.username}`
         );
       }, command.cooldown * 1000);
     } else if (command.cooldown && !cooldown) {
@@ -65,57 +73,94 @@ export default async function interactionExecutor(
       );
     }
 
-    command.execute(
-      interaction,
-      (
-        interaction.options as unknown as {
-          _group: string | null;
-          _subcommand: string | null;
-          _hoistedOptions: Array<{
-            name: string;
-            type: number;
-            value: string;
-          }>;
-        }
-      )._hoistedOptions.reduce(
-        (acc: any[], o: any) => {
-          return { ...acc, [o.name]: o.value };
-        },
-        {
-          ...(interaction.options._group
-            ? {
-                group: interaction.options._group,
-                subcommand: interaction.options._subcommand,
+    if (layout) {
+      if (isAsyncFunction(layout)) {
+        layout(interaction).then(() => {
+          command.execute(
+            interaction,
+            (
+              interaction.options as unknown as {
+                _group: string | null;
+                _subcommand: string | null;
+                _hoistedOptions: Array<{
+                  name: string;
+                  type: number;
+                  value: string;
+                }>;
               }
-            : interaction.options._subcommand
-            ? { subcommand: interaction.options._subcommand }
-            : {}),
-        }
-      )
-    );
+            )._hoistedOptions.reduce(
+              (acc: any[], o: any) => {
+                return { ...acc, [o.name]: o.value };
+              },
+              {
+                ...(interaction.options._group
+                  ? {
+                      group: interaction.options._group,
+                      subcommand: interaction.options._subcommand,
+                    }
+                  : interaction.options._subcommand
+                  ? { subcommand: interaction.options._subcommand }
+                  : {}),
+              }
+            )
+          );
+        });
+      } else {
+        layout(interaction);
+
+        command.execute(
+          interaction,
+          (
+            interaction.options as unknown as {
+              _group: string | null;
+              _subcommand: string | null;
+              _hoistedOptions: Array<{
+                name: string;
+                type: number;
+                value: string;
+              }>;
+            }
+          )._hoistedOptions.reduce(
+            (acc: any[], o: any) => {
+              return { ...acc, [o.name]: o.value };
+            },
+            {
+              ...(interaction.options._group
+                ? {
+                    group: interaction.options._group,
+                    subcommand: interaction.options._subcommand,
+                  }
+                : interaction.options._subcommand
+                ? { subcommand: interaction.options._subcommand }
+                : {}),
+            }
+          )
+        );
+      }
+    }
   }
 
-  if (interaction.isAutocomplete()) {
-    let command: SlashCommand = interaction.client.commands.slash.get(
-      interaction.commandName
+  if (discordInteraction.isAutocomplete()) {
+    let command: SlashCommand = discordInteraction.client.commands.slash.get(
+      discordInteraction.commandName
     ) as SlashCommand;
 
     if (!command) {
       throw new Error(
-        `❌ | The command named ${interaction.commandName} was not found.`
+        `❌ | The command named ${discordInteraction.commandName} was not found.`
       );
     } else if (command && !command.autocomplete) {
       throw new Error(
-        `❌ | The command named "${interaction.commandName}" does not have a string array for autocomplete.`
+        `❌ | The command named "${discordInteraction.commandName}" does not have a string array for autocomplete.`
       );
     }
 
     if (Array.isArray(command.autocomplete)) {
       const fuse = new Fuse(command.autocomplete);
 
-      await interaction.respond(
+      await discordInteraction.respond(
         fuse
-          .search(interaction.options.getFocused())
+          .search(discordInteraction.options.getFocused())
           .map((item) => ({ name: item.item, value: item.item }))
       );
     } else if (typeof command.autocomplete == "object") {
@@ -123,70 +168,72 @@ export default async function interactionExecutor(
         keys: command.autocomplete.keys,
       });
 
-      await interaction.respond(
+      await discordInteraction.respond(
         fuse
-          .search(interaction.options.getFocused())
+          .search(discordInteraction.options.getFocused())
           .map((item) => ({ name: item.item, value: item.item }))
       );
     } else if (command.autocomplete) {
-      command.autocomplete(interaction);
+      command.autocomplete(discordInteraction);
     }
   }
 
-  if (interaction.isButton()) {
-    let command: ButtonCommand = interaction.client.commands.button.get(
-      interaction.customId
+  if (discordInteraction.isButton()) {
+    let command: ButtonCommand = discordInteraction.client.commands.button.get(
+      discordInteraction.customId
     ) as ButtonCommand;
 
     if (!command) {
       throw new Error(
-        `❌ | The command with custom id "${interaction.customId}" does not have a string set for autocomplete.`
+        `❌ | The command with custom id "${discordInteraction.customId}" does not have a string set for autocomplete.`
       );
     }
 
-    command.execute(interaction);
+    command.execute(discordInteraction);
   }
 
-  if (interaction.isAnySelectMenu()) {
-    let command: SelectMenuCommand = interaction.client.commands.selectmenu.get(
-      interaction.customId
-    ) as SelectMenuCommand;
+  if (discordInteraction.isAnySelectMenu()) {
+    let command: SelectMenuCommand =
+      discordInteraction.client.commands.selectmenu.get(
+        discordInteraction.customId
+      ) as SelectMenuCommand;
 
     if (!command) {
       throw new Error(
-        `❌ | The command with custom id "${interaction.customId}" does not have a string set for autocomplete.`
+        `❌ | The command with custom id "${discordInteraction.customId}" does not have a string set for autocomplete.`
       );
     }
 
-    command.execute(interaction);
+    command.execute(discordInteraction);
   }
 
-  if (interaction.isContextMenuCommand()) {
-    let command: ContextCommand = interaction.client.commands.context.get(
-      interaction.commandName
-    ) as ContextCommand;
+  if (discordInteraction.isContextMenuCommand()) {
+    let command: ContextCommand =
+      discordInteraction.client.commands.context.get(
+        discordInteraction.commandName
+      ) as ContextCommand;
 
     if (!command) {
       throw new Error(
-        `❌ | The command named ${interaction.commandName} was not found.`
+        `❌ | The command named ${discordInteraction.commandName} was not found.`
       );
     }
 
     command.execute(
-      interaction as unknown as ContextCommand["command"]["type"] extends ApplicationCommandType.Message
+      discordInteraction as unknown as ContextCommand["command"]["type"] extends ApplicationCommandType.Message
         ? MessageContextMenuCommandInteraction
         : UserContextMenuCommandInteraction
     );
   }
 
-  if (interaction.isModalSubmit()) {
-    let command: SlashCommand = interaction.client.commands.slash.get(
-      interaction.customId
+  if (discordInteraction.isModalSubmit()) {
+    let command: SlashCommand = discordInteraction.client.commands.slash.get(
+      discordInteraction.customId
     ) as SlashCommand;
 
     if (!command) {
       throw new Error(
-        `❌ | The command named ${interaction.customId} was not found.`
+        `❌ | The command named ${discordInteraction.customId} was not found.`
       );
     } else if (!command.modal) {
       throw new Error(
@@ -194,6 +241,6 @@ export default async function interactionExecutor(
       );
     }
 
-    command.modal(interaction);
+    command.modal(discordInteraction);
   }
 }

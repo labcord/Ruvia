@@ -1,11 +1,11 @@
 import { Events, Client } from "discord.js";
-import registerCommands from "@/ruvia/registerCommand.ts";
+import { registerCommands } from "ruvia";
 
 const event = {
   type: Events.ClientReady,
   execute: async (client: Client) => {
-    await registerCommands(client)
-  }
+    await registerCommands(client);
+  },
 };
 
 export default event;

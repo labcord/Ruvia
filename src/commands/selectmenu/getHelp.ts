@@ -1,4 +1,4 @@
-import type { SelectMenuCommand } from "rTypes";
+import type { SelectMenuCommand } from "ruvia/types";
 
 const questions = [
     {
