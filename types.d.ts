@@ -13,7 +13,6 @@ import {
   MessageReactionEventDetails,
   AnySelectMenuInteraction,
   Collection,
-  Events,
 } from "discord.js"
 
 export type RuviaConfig = {
@@ -33,17 +32,18 @@ export type RuviaConfig = {
     cooldown?: {
       warningMessage?: (remainingTime: number) => string
       warningMessageDeletionTime?: number
-    }
+    },wwww
 }
 
 export type SlashCommand = {
   command: SlashCommandBuilder
   execute: (interaction: ChatInputCommandInteraction, options: Object) => void
   modal?: (interaction: ModalSubmitInteraction) => void
-  autocomplete?: Array<any> | ((interaction: AutocompleteInteraction) => void) | { keys: string[], choices: Array<any> }
+  autocomplete?: Array<object> | ((interaction: AutocompleteInteraction) => void) | { keys: string[], choices: Array<object> }
   cooldown?: number
   blackList?: Array<string>
   whiteList?: Array<string>
+  category?: string
 }
 
 export type ButtonCommand = {
@@ -71,15 +71,15 @@ export type SelectMenuCommand = {
 declare module "discord.js" {
     export interface Client {
         commands: {
-          slash: Collection<string, SlashCommand>,
-          message: Collection<string, SlashCommand>,
-          button: Map<string, ButtonCommand>,
-          reaction: Map<string, ReactionCommand>,
-          context: Map<string, ContextCommand>,
-          selectmenu: Map<string, SelectMenuCommand>,
+          slash: Collection<string, SlashCommand | Function | object>,
+          message: Collection<string, SlashCommand | Function | object>,
+          button: Map<string, ButtonCommand | Function | object>,
+          reaction: Map<string, ReactionCommand | Function | object>,
+          context: Map<string, ContextCommand | Function | object>,
+          selectmenu: Map<string, SelectMenuCommand> | Function | object,
         },
         cooldown: Collection<string, number>
-        modals: Map<string, any>
+        modals: Map<string, any>,
     }
 }
 
