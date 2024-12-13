@@ -137,6 +137,35 @@ export default async function interactionExecutor(
           )
         );
       }
+    } else {
+      command.execute(
+        interaction,
+        (
+          interaction.options as unknown as {
+            _group: string | null;
+            _subcommand: string | null;
+            _hoistedOptions: Array<{
+              name: string;
+              type: number;
+              value: string;
+            }>;
+          }
+        )._hoistedOptions.reduce(
+          (acc: any[], o: any) => {
+            return { ...acc, [o.name]: o.value };
+          },
+          {
+            ...(interaction.options._group
+              ? {
+                  group: interaction.options._group,
+                  subcommand: interaction.options._subcommand,
+                }
+              : interaction.options._subcommand
+              ? { subcommand: interaction.options._subcommand }
+              : {}),
+          }
+        )
+      );
     }
   }
 
