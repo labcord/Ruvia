@@ -2,7 +2,7 @@
 # Ruvia | Advanced Discord Bot Framework
 
 
-![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FFVypRkKAqVewlOvUOMbE%2Fuploads%2FXZo4Zr5dr8HhJOgL1b8j%2FRUVIA%20(1).png?alt=media&token=3ee8a19c-1aa9-48bc-9bf5-eb057ddaf105)
+![](https://i.imgur.com/nZ3sav5.png)
 
 ## What features does Ruvia have?
 
