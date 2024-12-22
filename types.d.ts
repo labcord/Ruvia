@@ -25,9 +25,7 @@ export type RuviaConfig = {
       }
     }
     slashCommands?: {
-      options?: {
         noPermissionMessage?: string,
-      }
     }
     cooldown?: {
       warningMessage?: (remainingTime: number) => string
