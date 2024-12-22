@@ -26,6 +26,16 @@ export default async function interactionExecutor(
       discordInteraction.commandName
     ) as SlashCommand;
 
+    if(Array.isArray(command.whiteList) && !command.whiteList.includes(interaction.user.id)){
+      interaction.reply(RuviaConfig.slashCommands?.noPermissionMessage || `❌ **| You do not have permission to use this command.**`)
+      return
+    }
+
+    if(Array.isArray(command.blackList) && command.blackList.includes(interaction.user.id)){
+      interaction.reply(RuviaConfig.slashCommands?.noPermissionMessage || `❌ **| You do not have permission to use this command.**`)
+      return  
+    }
+
     const layout: Function | undefined = interaction.client.commands.slash.get(
       `@layout${command.category || ""}`
     ) as Function | undefined;
