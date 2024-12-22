@@ -30,7 +30,7 @@ export type RuviaConfig = {
     cooldown?: {
       warningMessage?: (remainingTime: number) => string
       warningMessageDeletionTime?: number
-    },wwww
+    },
 }
 
 export type SlashCommand = {
