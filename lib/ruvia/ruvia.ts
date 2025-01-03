@@ -6,6 +6,7 @@ import {
   PermissionsBitField,
   Channel,
   BaseMessageOptions,
+  SlashCommandBuilder,
 } from "discord.js";
 import path from "node:path";
 
@@ -20,19 +21,19 @@ export {
   interactionExecutor,
   registerCommands,
   reactionTrigers,
-  transformedSlashCommandExecutor
+  transformedSlashCommandExecutor,
 };
 
 export function getAllFiles(
   folderPath: string,
   mainFolderPath: string
-): Array<{ name: string, parent: string }> {
+): Array<{ name: string; parent: string }> {
   const results = [];
 
   const items = readdirSync(folderPath, { withFileTypes: true });
   for (const item of items) {
     const itemPath = path.join(folderPath, item.name); // Tam dosya yolunu oluştur
-    if (item.isDirectory()) { 
+    if (item.isDirectory()) {
       results.push(...getAllFiles(itemPath, mainFolderPath));
     } else {
       results.push(
@@ -177,6 +178,32 @@ export function getAllCommands(
       options?.only ? options?.only?.includes(type as any) : true
     )
     .map((type) => client.commands[`${type}`]);
+}
+
+export function setBlacklist(
+  commandName: string,
+  ids: string[],
+  { client }: { client: Client }
+) {
+  if(!client.commands.slash.has(commandName)) throw new Error("No such slash commands were found.")
+  const command = client.commands.slash.find(
+    (cmd) => cmd?.command?.name == commandName
+  );
+  const editedCommand = { ...command, blackList: ids }
+  client.commands.slash.set(commandName, editedCommand)
+}
+
+export function setWhitelist(
+  commandName: string,
+  ids: string[],
+  { client }: { client: Client }
+) {
+  if(!client.commands.slash.has(commandName)) throw new Error("No such slash commands were found.")
+  const command = client.commands.slash.find(
+    (cmd) => cmd?.command?.name == commandName
+  );
+  const editedCommand = { ...command, whiteList: ids }
+  client.commands.slash.set(commandName, editedCommand)
 }
 
 export const utils = {
