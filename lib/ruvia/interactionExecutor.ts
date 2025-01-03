@@ -19,32 +19,64 @@ export default async function interactionExecutor(
   discordInteraction: Interaction
 ): Promise<void> {
   if (discordInteraction.isChatInputCommand()) {
-    const interaction = convertSlashInteraction(
-      discordInteraction
-    );
+    const interaction = convertSlashInteraction(discordInteraction);
     let command: SlashCommand = interaction.client.commands.slash.get(
       discordInteraction.commandName
     ) as SlashCommand;
-
-    if(Array.isArray(command.whiteList) && !command.whiteList.includes(interaction.user.id)){
-      interaction.reply(RuviaConfig.slashCommands?.noPermissionMessage || `❌ **| You do not have permission to use this command.**`)
-      return
-    }
-
-    if(Array.isArray(command.blackList) && command.blackList.includes(interaction.user.id)){
-      interaction.reply(RuviaConfig.slashCommands?.noPermissionMessage || `❌ **| You do not have permission to use this command.**`)
-      return  
-    }
-
-    const layout: Function | undefined = interaction.client.commands.slash.get(
-      `@layout${command.category || ""}`
-    ) as Function | undefined;
 
     if (!command) {
       throw new Error(
         `❌ | The command named ${discordInteraction.commandName} was not found.`
       );
     }
+
+    const memberRoles = interaction.guild?.members.cache
+      .get(interaction.user.id)
+      ?.roles.cache.map((role) => role.id);
+
+    const userWhiteList =
+      command.whiteList?.filter((id) => !id.startsWith("r:")) || null;
+    const userBlackList =
+      command.blackList?.filter((id) => !id.startsWith("r:")) || null;
+
+    const roleWhiteList =
+      command.whiteList
+        ?.filter((id) => id.startsWith("r:"))
+        .map((id) => id.slice(2)) || null;
+    const roleBlackList =
+      command.blackList
+        ?.filter((id) => id.startsWith("r:"))
+        .map((id) => id.slice(2)) || null;
+
+    if (
+      (Array.isArray(command.whiteList) &&
+        !userWhiteList?.includes(interaction.user.id)) ||
+      (roleWhiteList &&
+        !memberRoles?.some((role) => roleWhiteList.includes(role)))
+    ) {
+      interaction.reply(
+        RuviaConfig.slashCommands?.noPermissionMessage ||
+          `❌ **| You do not have permission to use this command.**`
+      );
+      return;
+    }
+
+    if (
+      (Array.isArray(command.blackList) &&
+        userBlackList?.includes(interaction.user.id)) ||
+      (roleBlackList &&
+        memberRoles?.some((role) => roleBlackList.includes(role)))
+    ) {
+      interaction.reply(
+        RuviaConfig.slashCommands?.noPermissionMessage ||
+          `❌ **| You do not have permission to use this command.**`
+      );
+      return;
+    }
+
+    const layout: Function | undefined = interaction.client.commands.slash.get(
+      `@layout${command.category || ""}`
+    ) as Function | undefined;
 
     let cooldown = interaction.client.cooldown.get(
       `${discordInteraction.commandName}-${discordInteraction.user.username}`
