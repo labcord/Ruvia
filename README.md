@@ -42,6 +42,10 @@ Ruvia has a cache memory system.
 
 Ruvia has a resilient architecture and uses Deno 2.0.
 
+**📟 | CLI SUPPORT**
+
+Creating a Ruvia project is very easy.
+
 🌐 | DASHBOARD SUPPORT (COMING SOON)
 
 ## Installation
