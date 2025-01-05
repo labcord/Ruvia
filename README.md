@@ -54,8 +54,24 @@ First of all, don't forget to install Deno 2.0
 You can find more detailed information on how to install and use Deno from the link below.
 https://deno.com/
 
-Clone the repo to install Ruvia.
+### With ruvia-cli
+Install globally ruvia-cli with npm.
+```bash
+npm install -g @labcord/ruvia-cli
+```
 
+Then create a Ruvia application.
+```bash
+ruvia create -n myRuviaProject
+```
+
+Finally, run it in developer mode.
+```bash
+deno run dev
+```
+
+### With git
+Clone the repo to install Ruvia.
 ```bash
 git clone https://github.com/labcord/ruvia
 ```
@@ -64,6 +80,7 @@ Then install the dependencies.
 ```bash
 deno install
 ```
+
 Then run it in developer mode.
 ```bash
 deno run dev
